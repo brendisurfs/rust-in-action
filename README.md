@@ -1,6 +1,11 @@
 # rust-in-action
 ## Code examples and snippets from the book.
 
+## current chapter 
+Chapter 1 ✅
+Chapter 2 ✅
+Chapter 3 📖
+
 This is a repo of me following along with the first book I have sat down and read for more than 2 hours straight since 6th grade. Good book.
 I found this to be a better way to aid in my ever present need to learn Rust as much as I can. 
 
