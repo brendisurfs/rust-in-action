@@ -1,10 +1,20 @@
 #[deny(unused)]
 use rand::prelude::*;
 
+/// FileState -
+/// an enum representing the files state.
+///
+#[derive(Debug, PartialEq)]
+pub enum FileState {
+    Open,
+    Closed,
+}
+
 #[derive(Debug)]
 pub struct File {
     pub name: String,
     pub data: Vec<u8>,
+    pub state: FileState,
 }
 
 #[allow(dead_code)]
@@ -13,6 +23,7 @@ impl File {
         File {
             name: String::from(name),
             data: Vec::new(),
+            state: FileState::Closed,
         }
     }
 
@@ -23,6 +34,10 @@ impl File {
     }
 
     pub fn read(self: &File, save_dir: &mut Vec<u8>) -> Result<usize, String> {
+        if self.state != FileState::Open {
+            return Err(String::from("file must be open before reading"));
+        }
+
         let mut temp = self.data.clone();
         let read_len = temp.len();
         save_dir.reserve(read_len);
@@ -30,21 +45,22 @@ impl File {
         Ok(read_len)
     }
 }
-pub fn open(f: File) -> Result<File, String> {
+///open - opens the file.  Returns a Result <File, String>
+///
+/// @param `f` - a File struct that holds the name and data of the file.
+pub fn open(mut f: File) -> Result<File, String> {
+    f.state = FileState::Open;
+
     if one_in(10_000) {
-        // throws an artificial error once in 10000 times.
         let err = String::from("Permission Denied");
         return Err(err);
     }
     Ok(f)
 }
 
-// close - closes the file reader, throws an error once in 10_000 runs.
-pub fn close(f: File) -> Result<File, String> {
-    if one_in(10_000) {
-        let err = String::from("signal interrupt");
-        return Err(err);
-    }
+/// close - closes the file reader, throws an error once in 10_000 runs.
+pub fn close(mut f: File) -> Result<File, String> {
+    f.state = FileState::Closed;
     Ok(f)
 }
 
