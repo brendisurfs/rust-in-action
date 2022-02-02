@@ -12,17 +12,16 @@ pub enum FileState {
 
 #[derive(Debug)]
 pub struct File {
-    pub name: String,
-    pub data: Vec<u8>,
+    pub name:  String,
+    pub data:  Vec<u8>,
     pub state: FileState,
 }
 
-#[allow(dead_code)]
 impl File {
     pub fn new(name: &str) -> File {
         File {
-            name: String::from(name),
-            data: Vec::new(),
+            name:  String::from(name),
+            data:  Vec::new(),
             state: FileState::Closed,
         }
     }
@@ -33,9 +32,14 @@ impl File {
         f
     }
 
-    pub fn read(self: &File, save_dir: &mut Vec<u8>) -> Result<usize, String> {
+    pub fn read(
+        self: &File,
+        save_dir: &mut Vec<u8>,
+    ) -> Result<usize, String> {
         if self.state != FileState::Open {
-            return Err(String::from("file must be open before reading"));
+            return Err(String::from(
+                "file must be open before reading",
+            ));
         }
 
         let mut temp = self.data.clone();
